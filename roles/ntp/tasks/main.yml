@@ -1,0 +1,15 @@
+---
+# tasks file for ntp
+
+- name: install ntp service
+  shell: 'apt-get install -y ntp'
+  become: yes
+
+- name: copy ntp.conf from server to Node
+  copy:
+    src: "/etc/ansible/roles/ntp/files/ntp.conf"
+    dest: /etc/ntp.conf
+
+- name: restart ntp service
+  shell: 'service ntp restart'
+  become: yes

@@ -1,0 +1,30 @@
+---
+# tasks file for install
+
+- name: install Firefox
+  shell: 'apt-get install -y firefox'
+  become: yes
+
+- name: install git
+  shell: 'apt-get install -y git'
+  become: yes
+
+- name: install gnome
+  shell: 'apt-get install -y gnome'
+  become: yes
+
+- name: install notepadqq
+  shell: 'apt-get install -y notepadqq'
+  become: yes
+
+- name: install GIMP
+  shell: 'apt-get install -y gimp'
+  become: yes
+
+- name: install vlc
+  shell: 'apt-get install -y vlc'
+  become: yes
+
+- name: install LibreOfice
+  shell: 'apt-get install -y libreoffice'
+  become: yes

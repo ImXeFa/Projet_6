@@ -1,0 +1,48 @@
+- hosts: "{{chote}}"
+  become: yes
+  tasks:
+  - name: Update and Upgrade
+    apt:
+      upgrade: yes
+      update_cache: yes
+      cache_valid_time: 86400 #One Day
+      force: yes
+  - name: Remove packages not needed anymore
+    apt:
+      autoremove: yes
+
+- name: Add an Administrator
+  hosts: "{{chote}}"
+  become: yes
+  roles:
+  - AddUser
+
+- name: SSH create key
+  hosts: "{{chote}}"
+  become: yes
+  roles:
+  - sshKeyGen
+
+- name: Set the Firewall (iptable)
+  hosts: "{{chote}}"
+  become: yes
+  roles:
+  - firewall
+
+- name: install Firefox, notepad and Libre office
+  hosts: "{{chote}}"
+  become: yes
+  roles:
+  - install
+
+- name: install and config ntp service
+  hosts: "{{chote}}"
+  become: yes
+  roles:
+  - ntp
+
+- name: Put the Nodes in the AD
+  hosts: "{{chote}}"
+  become: yes
+  roles:
+  - AD

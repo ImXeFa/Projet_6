@@ -1,0 +1,15 @@
+---
+
+ansible_user: ansible
+
+ansible_password: @dmin-28
+
+ansible_connection: winrm
+
+ansible_winrm_server_cert_validation: ignore
+
+ansible_winrm_transport: basic
+
+ansible_winrm_port: 5985
+
+ansible_python_interpreter: C:\Users\geekflare\AppData\Local\Programs\Python\Python37\python
