@@ -1,0 +1,26 @@
+---
+# tasks file for install
+
+- name: install Firefox
+  shell: 'apt-get install -y firefox'
+  become: yes
+
+- name: install git
+  shell: 'apt-get install -y git'
+  become: yes
+
+- name: install gimp
+  shell: 'apt-get install -y gimp'
+  become: yes
+
+- name: install notepadqq
+  shell: 'apt-get install -y notepadqq'
+  become: yes
+
+- name: install PowerShell
+  shell: 'snap install powershell --classic'
+  become: yes
+
+- name: instalation de l'anti-virus
+  shell: 'apt-get install -y clamav'
+  become: yes

@@ -1,0 +1,20 @@
+---
+# tasks file for AD
+
+- name: Configure resolv.conf
+  copy:
+    src: /etc/ansible/roles/AD/files/resolv.conf
+    dest: /etc/resolv.conf
+  become: yes
+
+- name: Clear the /etc/krb5.conf file
+  shell: 'echo "" > /etc/krb5.conf'
+  become: yes
+
+- name: Configure the /etc/krb5.conf file
+  shell: 'echo -e "[libdefaults]\n\tdefault_realm = OC.Projet6.AD\n\trdns = false" > /etc/krb5.conf'
+  become: yes
+
+- name: Join the AD realm
+  shell: 'echo @dmin-28 | realm join --user=ansible OC.Projet6.AD'
+  become: yes

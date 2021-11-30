@@ -1,0 +1,146 @@
+---
+# tasks file for firewall
+
+- name: Reset the current iptables
+  shell: 'iptables -F'
+  become: yes
+
+- name: Reset the current iptables
+  shell: 'iptables -X'
+  become: yes
+
+- name: Reset the current nat iptables
+  shell: 'iptables -t nat -F'
+  become: yes
+
+- name: Reset the current nat iptables
+  shell: 'iptables -t nat -X'
+  become: yes
+
+- name: Install iptables-persistent
+  apt:
+    name: iptables-persistent
+    state: present
+
+## Nat Table ##
+
+- name: Allow POSTROUTING on the nat interface
+  shell: 'iptables -t nat -A POSTROUTING -o enp0s3 -j MASQUERADE'
+  become: yes
+
+## INPUT Table ##
+
+- name: Allow INPUT icmp
+  iptables:
+    chain: INPUT
+    protocol: icmp
+    jump: ACCEPT
+
+- name: Allow INPUT ssh
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    jump: ACCEPT
+    destination_port: 22
+
+- name: Allow INPUT DHCP Server and Client
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    jump: ACCEPT
+    destination_ports:
+      - "67"
+      - "68" 
+
+- name: Allow INPUT http and https
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    jump: ACCEPT
+    destination_ports:
+      - "80"
+      - "443" 
+
+- name: Allow INPUT Domain Name Service (DNS)
+  iptables:
+    chain: INPUT
+    protocol: udp
+    jump: ACCEPT
+    destination_port: 53
+
+- name: Allow INPUT Network time Protocol (NTP)
+  iptables:
+    chain: INPUT
+    protocol: udp
+    jump: ACCEPT
+    destination_port: 123
+
+- name: Allow INPUT range of IP's
+  iptables:
+    chain: INPUT
+    in_interface: enp0s8
+    source: 192.168.0.0/24
+    jump: ACCEPT
+
+## OUTPUT Tables ##
+
+- name: Allow OUTPUT icmp
+  iptables:
+    chain: OUTPUT
+    protocol: icmp
+    jump: ACCEPT
+
+- name: Allow OUTPUT ssh
+  iptables:
+    chain: OUTPUT
+    protocol: tcp
+    jump: ACCEPT
+    destination_port: 22
+
+- name: Allow OUTPUT DHCP Server and Client
+  iptables:
+    chain: OUTPUT
+    protocol: tcp
+    jump: ACCEPT
+    destination_ports:
+      - "67"
+      - "68"
+
+- name: Allow OUTPUT http and https
+  iptables:
+    chain: OUTPUT
+    protocol: tcp
+    jump: ACCEPT
+    destination_ports:
+      - "80"
+      - "443"
+
+- name: Allow OUTPUT Domain Name Service (DNS)
+  iptables:
+    chain: OUTPUT
+    protocol: udp
+    jump: ACCEPT
+    destination_port: 53
+
+- name: Allow OUTPUT Network time Protocol (NTP)
+  iptables:
+    chain: OUTPUT
+    protocol: udp
+    jump: ACCEPT
+    destination_port: 123 
+
+- name: Allow OUTPUT range of IP's
+  iptables:
+    chain: OUTPUT
+    out_interface: enp0s8
+    source: 192.168.0.0/24
+    jump: ACCEPT
+
+## Drop Tables ##
+- name: DROP all the rest of protocol
+  iptables:
+    chain: OUTPUT
+    jump: DROP
+
+- name: persistent rules
+  shell: iptables-save > /etc/iptables/rules.v4
